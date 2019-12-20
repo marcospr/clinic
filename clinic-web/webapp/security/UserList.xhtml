@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../template/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<!-- Sessão Titulo -->
+	<ui:define name="titulo">
+		Cadastro de Usuários
+	</ui:define>
+
+	<!-- Sessão Corpo -->	
+	<ui:define name="corpo">
+		
+		<h:form id="formUser">
+			<p:messages id="messages" />
+			
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+					<p:inputText id="termoPesquisa" placeholder="Digite aqui um termo para pesquisa..." 
+						size="30" value="#{userMBean.termoPesquisa}"/>
+					
+					<p:commandButton value="Pesquisar" icon="fa fa-search"
+						actionListener="#{userMBean.pesquisar}" update="usersDataTable messages"
+						process="@this termoPesquisa"/>
+					
+					<span class="ui-separator">
+		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		            </span>
+		            
+		            <p:commandButton value="Nova" icon="fa fa-plus"
+		            	actionListener="#{userMBean.prepararNovoUsuario}" 
+		            	oncomplete="PF('userDialogWidgetVar').show()"
+		            	update="userDialog" process="@this">
+		            	<p:resetInput target="userDialog" />	
+	            	</p:commandButton>
+		            
+					<span class="ui-separator">
+		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		            </span>
+		            
+		            <p:commandButton title="Editar" icon="fa fa-edit" 
+		            	disabled="#{not userMBean.usuarioSeleciona}"
+		            	actionListener="#{userMBean.prepararEdicao}"
+		            	oncomplete="PF('userDialogWidgetVar').show()"
+		            	update="userDialog" process="@this">
+		            	<p:resetInput target="userDialog" />	
+	            	</p:commandButton>
+		            
+		            <p:commandButton title="Excluir" icon="fa fa-trash" 
+		            	disabled="#{not userMBean.usuarioSeleciona}"
+		            	actionListener="#{userMBean.excluir}"
+		            	update="messages usersDataTable toolbar"
+		            	process="@this">
+		            	<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+		            		message="Posso excluir o usuário?" />	
+	            	</p:commandButton>
+		            
+					<span class="ui-separator">
+		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		            </span>
+		            
+		            <p:commandButton title="Exportar para o Excel" icon="fa fa-file-excel-o"
+		            	ajax="false">
+		            	<p:dataExporter type="xls" target="usersDataTable" fileName="usuarios" />
+		            </p:commandButton>		
+				</f:facet>
+			</p:toolbar>
+			
+			<p:spacer height="20px" />
+			
+			<p:dataTable id="usersDataTable" value="#{userMBean.users}"
+				var="user" emptyMessage="Nenhuma informação a ser exibida"
+				paginator="true" rows="10" paginatorPosition="bottom"
+				selectionMode="single" selection="#{userMBean.user}" rowKey="#{user.id}">
+				
+				<p:ajax event="rowSelect" update="formUser:toolbar" />
+				
+				<p:ajax event="rowUnselect" update="formUser:toolbar" />
+				
+				<p:column headerText="Id">
+			        <h:outputText value="#{user.id}" />
+			    </p:column>
+			 
+			    <p:column headerText="Name" sortBy="#{user.name}">
+			        <h:outputText value="#{user.name}" />
+			    </p:column>
+			 
+			    <p:column headerText="e-mail">
+			        <h:outputText value="#{user.email}" />
+			    </p:column>
+			 
+			    <p:column headerText="Phone">
+			        <h:outputText value="#{user.phone}" />
+			    </p:column>
+			    
+			    <p:column headerText="Data expiração usuário">
+			        <h:outputText value="#{user.userExpiresDate}" />
+			    </p:column>
+			    
+			    <p:column headerText="Data expiração senha">
+			        <h:outputText value="#{user.passExpiresDate}" />
+			    </p:column>
+			    
+			    <p:column headerText="Ativo">
+			        <h:outputText value="#{user.actived}" />
+			    </p:column>
+			</p:dataTable>
+			
+			<p:dialog id="userDialog" header="Novo usuario" widgetVar="userDialogWidgetVar"
+				modal="true" resizable="false" closeOnEscape="true">
+				<p:messages id="userMessages" />
+				
+				<p:defaultCommand target="salvarCommandButton" scope="userDialog" />
+				
+				<h:panelGrid id="userPanelGrid" columns="2"	rendered="#{userMBean.user ne null}">
+					<p:outputLabel value="Nome: " for="name" />
+					<p:inputText id="name" size="80" maxlength="100" value="#{userMBean.user.name}" />
+					
+					<p:outputLabel value="Senha: " for="senhaHide" />
+					<p:inputText id="senhaHide" size="80" value="#{userMBean.user.password}" readonly="true"/>
+					
+					<p:outputLabel value="Email: " for="email" />
+					<p:inputText id="email" size="80" maxlength="100" 
+						value="#{userMBean.user.email}" />
+						
+					<p:outputLabel value="Telefone: " for="phone" />
+					<p:inputText id="phone" size="80" maxlength="100" 
+						value="#{userMBean.user.phone}" />
+					
+					<p:outputLabel value="Data expiração usuário: " for="userExpiresDate" />
+					<p:calendar id="userExpiresDate" pattern="dd/MM/yyyy" size="30" 
+						value="#{userMBean.user.userExpiresDate}"/>
+					
+					<h:outputLabel />
+					
+					<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{userMBean.salvar}"
+						update="userPanelGrid userMessages"
+						oncomplete="if (!args.validationFailed) PF('userDialogWidgetVar').hide()" process="userDialog"/>
+				</h:panelGrid>
+			</p:dialog>
+	     </h:form>
+     </ui:define>
+	
+	<!-- Sessão Rodapé -->
+	<ui:define name="rodape"/>
+</ui:composition>

@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>clinic-ear</artifactId>
+	<packaging>ear</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>br.com.clinic</groupId>
+			<artifactId>clinic-ejb</artifactId>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>br.com.clinic</groupId>
+			<artifactId>clinic-common-jar</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.clinic</groupId>
+			<artifactId>clinic-web</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<version>8</version>
+					<earSourceDirectory>EarContent</earSourceDirectory>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<modules>
+						<webModule>
+							<groupId>br.com.clinic</groupId>
+							<artifactId>clinic-web</artifactId>
+							<bundleFileName>clinic-web.war</bundleFileName>
+							<!-- Define the context root for the webapp -->
+							<contextRoot>/${app.context}</contextRoot>
+						</webModule>
+						<!-- define all ejb modules -->
+						<ejbModule>
+							<groupId>br.com.clinic</groupId>
+							<artifactId>clinic-ejb</artifactId>
+							<bundleFileName>clinic-ejb.jar</bundleFileName>
+						</ejbModule>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<properties>
+		<app.context>clinic-web</app.context>
+	</properties>
+	<parent>
+		<groupId>br.com.clinic</groupId>
+		<artifactId>clinic</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+</project>

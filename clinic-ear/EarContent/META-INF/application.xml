@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_8.xsd" id="Application_ID" version="8">
+  <display-name>clinic-ear</display-name>
+  <module>
+    <web>
+      <web-uri>clinic-web.war-1.0.0-SNAPSHOT.war</web-uri>
+      <context-root>clinic-web</context-root>
+    </web>
+  </module>
+  <module>
+    <ejb>clinic-ejb.jar-1.0.0-SNAPSHOT.jar</ejb>
+  </module>
+  <library-directory>lib</library-directory>
+</application>

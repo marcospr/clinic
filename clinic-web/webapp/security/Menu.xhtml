@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Login</title>
+</h:head>
+<h:body>
+	<p:messages id="messages" globalOnly="true" />
+	<h:form id="formLogin">
+		<h:panelGrid columns="3">
+			<p:outputLabel value="Usuário" for="inputUsuario" />
+			<p:inputText id="inputUsuario" required="true"
+				value="#{loginMBean.usuario}" />
+			<p:message for="inputUsuario" />
+
+			<p:outputLabel value="Senha" for="inputSenha" />
+			<p:password id="inputSenha" required="true" value="#{loginMBean.senha}" />
+			<p:message for="inputSenha" />
+		</h:panelGrid>
+
+		<p:commandButton id="btEntrar" value="Entrar" ajax="false"
+			action="#{loginMBean.onClickLogar()}" icon="ui-icon-check"
+			update="@form" process="@form" />
+	</h:form>
+</h:body>
+</html>

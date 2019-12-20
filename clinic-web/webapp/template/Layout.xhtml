@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<f:view contentType="text/html"/>
+	
+	<meta charset="UTF-8"/>
+	<title>Segurança</title>
+	<h:head>
+		<h:outputStylesheet library="css" name="estilo.css" />
+	</h:head>
+	
+	<h:body>
+		<header>
+			<div>
+				<div style="display: inline-block; width: 70%">
+					<!-- Logo -->
+					<h:graphicImage library="image" name="cpqd.png" />
+				</div>
+				
+				<div style="display: inline-block; width: 5%; align: center; vertical-align: middle !important;">
+					<!-- Close System -->
+		    		<h:form id="closeFormId">
+			    		<p:commandLink  id="buttonSair" style="font-family:Arial, Helvetica, sans-serif; color:#36648B; font-size:7pt;text-decoration: none;" action="#{loginMBean.logout}">
+				    		<img id="Sair" src="#{loginMBean.requestContextPath}/resources/image/iconeSair.png"  style="width:17px; height:auto;border: none"/>
+				    		<p:spacer width="2px"/>Logout
+			    		</p:commandLink>
+		    		</h:form>
+	    		</div>
+	    		
+	    		
+    		</div>
+		</header>
+		
+		<!-- Menu principal -->
+		<h:form id="menuBarForm">
+			<p:growl id="messages" widgetVar="messages"/> 
+			 <p:menubar>
+				<p:submenu label="Cadastros" rendered="#{request.isUserInRole('admin.security')}" >
+					<p:menuitem value="Pacientes"  title="(Ctrl+Shift+A)"  ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}"/> 							
+	            	<p:menuitem value="Medicos" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}"/>
+	            	<p:menuitem value="Especialidades" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}"/>
+		      	</p:submenu>
+		      	<p:submenu label="Relatorios"   rendered="#{request.isUserInRole('admin.security')}" >
+		      		<p:submenu label="Medicos" rendered="#{request.isUserInRole('admin.security')}" >
+			        	<p:menuitem value="Ativos" ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}" />
+			            <p:menuitem value="Expirados" ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}" />
+			        </p:submenu>
+		        </p:submenu>
+		        <p:submenu label="Administrador"   rendered="#{request.isUserInRole('admin.security')}" >
+						<p:menuitem value="Usuarios"  title="(Ctrl+Shift+A)"  ajax="false" action="/security/UserList?faces-redirect=true"/> 							
+		            	<p:menuitem value="Roles" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true"/>
+		            	<p:menuitem value="Perfis" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true"/>
+		        </p:submenu>
+				<p:menuitem title="(Ctrl+Shift+D)" value="Sobre" action="/security/UserList?faces-redirect=true" ajax="false"/>
+		    </p:menubar>
+	  		<h:panelGrid columns="2" cellpadding="10">        
+				<h:outputText value="Temas:"></h:outputText>
+	    		<!-- Escolha de Temas -->
+				<h:form>
+					<p:themeSwitcher id="selectTema" style="width:165px" value="#{temaMBean.tema}" label="Tema:">
+					    <f:selectItems value="#{temaMBean.temas}" />
+					    <f:ajax/>
+					</p:themeSwitcher>
+				</h:form>
+			</h:panelGrid>
+		</h:form>
+		
+		
+		<h2>
+			<ui:insert name="titulo" />
+		</h2>
+		
+		<ui:insert name="corpo" />
+	
+		<ui:insert name="rodape" />
+		
+		
+		
+	</h:body>
+</html>

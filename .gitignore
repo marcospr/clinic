@@ -1,0 +1,16 @@
+*~
+.project
+.settings
+.classpath
+.checkstyle
+.iml
+target/
+pom.xml.bkp
+*.bak
+*.orig
+*.tar
+*.tar.gz
+*.zip
+*.bkp
+.metadata/
+.externalToolBuilders/

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:form id="formUser">
+		<p:messages id="messages" />
+		
+		<p:toolbar id="toolbar">
+			<f:facet name="left">
+				<p:inputText id="termoPesquisa" placeholder="Digite aqui um termo para pesquisa..." 
+					size="30" value="#{userMBean.termoPesquisa}"/>
+				
+				<p:commandButton value="Pesquisar" icon="fa fa-search"
+					actionListener="#{userMBean.pesquisar}" update="usersDataTable messages"
+					process="@this termoPesquisa"/>
+				
+				<span class="ui-separator">
+	                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+	            </span>
+	            
+	            <p:commandButton value="Nova" icon="fa fa-plus"
+	            	actionListener="#{userMBean.prepararNovoUsuario}" 
+	            	oncomplete=""
+	            	update="" process="@this">
+	            	<p:resetInput target="" />	
+            	</p:commandButton>
+	            
+				<span class="ui-separator">
+	                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+	            </span>
+	            
+	            <p:commandButton title="Editar" icon="fa fa-edit" 
+	            	disabled="#{not userMBean.usuarioSeleciona}"
+	            	actionListener="#{userMBean.prepararEdicao}"
+	            	oncomplete=""
+	            	update="" process="@this">
+	            	<p:resetInput target="" />	
+            	</p:commandButton>
+	            
+	            <p:commandButton title="Excluir" icon="fa fa-trash" 
+	            	disabled="#{not userMBean.usuarioSeleciona}"
+	            	actionListener="#{userMBean.excluir}"
+	            	update="messages userDataTable toolbar"
+	            	process="@this">
+	            	<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
+	            		message="Posso excluir o usuário?" />	
+            	</p:commandButton>
+	            
+				<span class="ui-separator">
+	                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+	            </span>
+	            
+	            <p:commandButton title="Exportar para o Excel" icon="fa fa-file-excel-o"
+	            	ajax="false">
+	            	<p:dataExporter type="xls" target="usersDataTable" fileName="usuarios" />
+	            </p:commandButton>		
+			</f:facet>
+		</p:toolbar>
+		
+		<p:spacer height="20px" />
+			
+		<h:panelGrid id="userPanelGrid" columns="2"
+			rendered="#{userMBean.user ne null}">
+			<p:outputLabel value="Nome: " for="name" />
+			<p:inputText id="name" size="80" maxlength="120" 
+				value="#{userMBean.user.name}" />
+			
+			<p:outputLabel value="Email: " for="email" />
+			<p:inputText id="email" size="80" maxlength="120" 
+				value="#{userMBean.user.email}" />
+				
+			<p:outputLabel value="Telefone: " for="phone" />
+			<p:inputText id="phone" size="80" maxlength="120" 
+				value="#{userMBean.user.phone}" />
+			
+			<p:outputLabel value="Data expiração usuário: " for="userExpiresDate" />
+			<p:calendar id="userExpiresDate" pattern="dd/MM/yyyy" size="30" 
+				value="#{userMBean.user.userExpiresDate}"/>
+			
+			<h:outputLabel />
+			
+			<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{userMBean.salvar}"
+				update="userPanelGrid userMessages"
+				oncomplete="" process=""/>
+		</h:panelGrid>
+		
+     </h:form>
+</html>	

@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>br.com.clinic</groupId>
+  <artifactId>clinic</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Clinic Management</name>
+  <modules>
+  	
+  	<module>clinic-ear</module>
+  	<module>clinic-ejb</module>
+  	<module>clinic-web</module>
+  	<module>clinic-common</module>
+  </modules>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>br.com.clinic</groupId>
+  			<artifactId>clinic-common-jar</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>br.com.clinic</groupId>
+  			<artifactId>clinic-ear</artifactId>
+  			<version>${project.version}</version>
+  			<type>ear</type>
+  		</dependency>
+  		<dependency>
+  			<groupId>br.com.clinic</groupId>
+  			<artifactId>clinic-ejb</artifactId>
+  			<version>${project.version}</version>
+  			<type>ejb</type>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<skipTests>true</skipTests>
+  	<revision>1.0.0-SNAPSHOT</revision>
+  </properties>
+</project>
