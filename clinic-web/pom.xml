@@ -99,12 +99,12 @@
 		</dependency> 
 		 -->
 		 
-		<!-- Modulos 
+		<!-- Modulos  -->
+
 		<dependency>
 			<groupId>br.com.clinic</groupId>
-			<artifactId>clinic-common</artifactId>
-		</dependency> -->
-
+			<artifactId>clinic-resources-jar</artifactId>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -133,6 +133,50 @@
 					<warSourceDirectory>webapp</warSourceDirectory>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!-- Java EE 6 doesn't require web.xml, Maven needs to catch up! -->
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<!-- copy client configuration -->
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>config_client/${client.name}/webapp</directory>
+						</resource>
+						<!-- put this files into WEB-INF -->
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<targetPath>WEB-INF/classes</targetPath>
+							<directory>config_client/${client.name}/resources</directory>
+						</resource>
+						<!-- put this files into WEB-INF -->
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<targetPath>WEB-INF/classes</targetPath>
+							<directory>config_client/${client.name}/webapp</directory>
+						</resource>
+						<!-- put this files into WebHelp -->
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<targetPath>WebHelp</targetPath>
+							<directory>config_client/${client.name}/WebHelp</directory>
+						</resource>
+						<!-- put this files into / -->
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<targetPath>/</targetPath>
+							<directory>config_client/${client.name}/about</directory>
+						</resource>
+					</webResources>
+					<packagingExcludes>**/empty.tmp</packagingExcludes>
+				</configuration>
+			</plugin>
+			
+			
+			
 		</plugins>
 	</build>
 	<parent>
@@ -140,4 +184,13 @@
 		<artifactId>clinic</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>br.com.clinic</groupId>
+				<artifactId>clinic-resources-jar</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

@@ -10,7 +10,9 @@
   	<module>clinic-ear</module>
   	<module>clinic-ejb</module>
   	<module>clinic-web</module>
-  	<module>clinic-common</module>
+  	
+  	<module>clinic-common-jar</module>
+  	<module>clinic-resources-jar</module>
   </modules>
   <dependencyManagement>
   	<dependencies>
