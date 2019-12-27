@@ -1,12 +1,11 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html"/>
-	<meta charset="UTF-8"/>
-	<title>Login</title>
 	<h:head>
 		<h:outputStylesheet library="css" name="estilo.css" />
 	</h:head>
@@ -27,9 +26,28 @@
 		<p:commandButton id="btEntrar" value="Entrar" ajax="false"
 			action="#{loginMBean.onClickLogar()}" icon="ui-icon-check"
 			update="@form" process="@form" />
-		<p:commandButton id="btForgot" value="Esqueci" ajax="false"
-			action="#{loginMBean.onClickForgot()}" icon="ui-icon-check"
-			update="@form" process="@form" />
+		<br/>
+        <p:commandLink style="text-decoration:underline;color:blue;"
+            value="Esqueci a senha"
+            onclick="PF('varDialogResetarSenha').show()"  />
 	</h:form>
+	
+	
+	<h:form id="dialog">
+        <p:dialog id="dialogResetarSenha" header="Recuperar Senha"
+            widgetVar="varDialogResetarSenha" modal="true" resizable="false" closeOnEscape="true">
+            <p:panelGrid columns="1">
+
+                <p:inputText value="#{loginMBean.email}" required="true"
+                    size="60" requiredMessage="O email é obrigatório"
+                    id="emailRecuperaSenha" placeholder="Digite seu email" />
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Enviar senha" 
+                actionListener="#{loginMBean.solicitarNovaSenha}"
+                oncomplete="if (!args.validationFailed) PF('userDialogWidgetVar').hide()" />
+            <p:commandButton value="Cancelar"  onclick="varDialogResetarSenha.hide()" />
+        </p:dialog>
+    </h:form>
 </h:body>
 </html>

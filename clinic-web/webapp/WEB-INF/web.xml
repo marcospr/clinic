@@ -20,10 +20,19 @@
   </login-config>
   
   <security-role>
-    <role-name>operator</role-name>
+    <role-name>admin.security</role-name>
   </security-role>
   <security-role>
-    <role-name>admin</role-name>
+    <role-name>main</role-name>
+  </security-role>
+  <security-role>
+    <role-name>patient.registration.read</role-name>
+  </security-role>
+  <security-role>
+    <role-name>patient.registration.create</role-name>
+  </security-role>
+  <security-role>
+    <role-name>patient.registration.update</role-name>
   </security-role>
   
   <!-- Segurança do Sistema -->

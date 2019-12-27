@@ -15,6 +15,8 @@ public interface UserServiceRemote extends CrudOperation<UserSystem, Long> {
 
 	List<UserSystem> findAllByActive(boolean actived);
 
-	void changePassword(UserSystem user);
+	UserSystem findByToken(String string);
+
+	void changePassword(Long id, String novaSenha);
 
 }

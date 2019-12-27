@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" />
+<meta charset="UTF-8" />
+
+<f:metadata>
+	<f:viewParam name="token" value="#{changePasswordMBean.token}"/>
+</f:metadata>
+
+<title>Login</title>
+<h:head>
+	<h:outputStylesheet library="css" name="estilo.css" />
+</h:head>
+<h:body>
+	<p:messages id="messages" globalOnly="true" />
+	<h:form id="formLogin">
+		<p:growl autoUpdate="false" life="1500" id="growl" />
+		
+		<p:outputLabel value="Alteração senha" />
+		<p:password required="true" placeholder="Insira nova senha"
+			maxlength="20"
+			validatorMessage="A senha deve conter de 4 a 20 caracteres"
+			value="#{changePasswordMBean.novaSenha}">
+			<f:validateLength minimum="4" />
+		</p:password>
+		<p:password required="true" placeholder="Confirmar Senha"
+			maxlength="20" value="#{changePasswordMBean.confirmarNovaSenha}" />
+		<p:commandButton value="Enviar" ajax="false"
+			 update="growl"
+			action="#{changePasswordMBean.salvar()}" id="btnLogin"
+			style="width: 265px; font-size: 14px; padding: 3px" />
+	</h:form>
+</h:body>
+</html>

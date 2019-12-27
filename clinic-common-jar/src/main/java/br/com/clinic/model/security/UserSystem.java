@@ -24,8 +24,9 @@ import lombok.NoArgsConstructor;
  * @author Marcos
  */
 @NamedQueries({
+		@NamedQuery(name = "UserSystem.findByToken", query = "select u from UserSystem u where u.token = :token"),
 		@NamedQuery(name = "UserSystem.findByEmail", query = "select u from UserSystem u where u.email = :email"),
-		@NamedQuery(name = "UserSystem.findByLikeName", query = "select u from UserSystem u where u.name like ':nameLike%'"),
+		@NamedQuery(name = "UserSystem.findByLikeName", query = "select u from UserSystem u where u.name like :likeName"),
 		@NamedQuery(name = "UserSystem.findAllByActived", query = "select u from UserSystem u where u.actived = :actived") })
 @Entity
 @Table(name = "user_system")
@@ -54,6 +55,12 @@ public class UserSystem extends EntityDefault {
 	@Column(name = "pass_expires_date", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date passExpiresDate;
+
+	@Column(length = 1000)
+	private String token;
+
+	@Column(length = 1000)
+	private String passwordToken;
 
 	/**
 	 * Perfil do usuario.
@@ -128,6 +135,22 @@ public class UserSystem extends EntityDefault {
 
 	public void setActived(Boolean actived) {
 		this.actived = actived;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getToken() {
+		return this.token;
+	}
+
+	public String getPasswordToken() {
+		return this.passwordToken;
+	}
+
+	public void setPasswordToken(String passwordToken) {
+		this.passwordToken = passwordToken;
 	}
 
 }

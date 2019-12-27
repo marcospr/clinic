@@ -21,8 +21,10 @@ public class UserMBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private UserServiceRemote userService;
-	@EJB(beanName = FacesMessagesHelper.BEAN_NAME)
+
+	@EJB(beanName = FacesMessagesHelper.FACES_MESSAGES_HELPER)
 	private FacesMessagesHelper messages;
+
 	private UserSystem user;
 	private List<UserSystem> users;
 	private String termoPesquisa;
@@ -47,7 +49,7 @@ public class UserMBean implements Serializable {
 
 		atualizarRegistros();
 
-		messages.info("Empresa salva com sucesso!");
+		messages.info("Empresa salva com sucesso!", false);
 
 		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
 	}
@@ -59,14 +61,14 @@ public class UserMBean implements Serializable {
 
 		atualizarRegistros();
 
-		messages.info("Usuario excluído com sucesso!");
+		messages.info("Usuario excluído com sucesso!", false);
 	}
 
 	public void pesquisar() {
 		users = userService.findByLikeName(termoPesquisa);
 
 		if (users.isEmpty()) {
-			messages.info("Sua consulta não retornou registros.");
+			messages.info("Sua consulta não retornou registros.", false);
 		}
 	}
 

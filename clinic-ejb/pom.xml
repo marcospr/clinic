@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>clinic-ejb</artifactId>
 	<packaging>ejb</packaging>
-	
+
 	<parent>
 		<groupId>br.com.clinic</groupId>
 		<artifactId>clinic</artifactId>
@@ -12,13 +12,18 @@
 	</parent>
 
 	<dependencies>
-		
-		<!-- hibernate-entitymanager 
+
+		<!-- hibernate-entitymanager <dependency> <groupId>org.hibernate</groupId> 
+			<artifactId>hibernate-entitymanager</artifactId> <version>5.4.3.Final</version> 
+			</dependency> -->
+
+
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.4.3.Final</version>
-		</dependency> -->
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 
 
 		<!-- Esse jar é somente usado para rodar o UserDBUtil p/ popular o banco -->

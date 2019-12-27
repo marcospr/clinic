@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -15,31 +14,41 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.clinic.helper.FacesMessagesHelper;
+import br.com.clinic.model.ConstantsView;
 import br.com.clinic.model.security.UserSystem;
 import br.com.clinic.service.UserServiceRemote;
+import br.com.clinic.service.impl.GeneratorPasswordService;
+import br.com.clinic.service.impl.TokenService;
 
 @Named
 @ViewScoped
 public class LoginMBean implements Serializable {
 
 	private static final long serialVersionUID = 535939470091051741L;
-	private static final String PAGINA_INDEX = "/main/Main.xhtml?faces-redirect=true";
-	private static final String SESSION_USER_VARIABLE_NAME = "user";
-
-	private String forwardUrl;
 
 	private String usuario;
 	private String senha;
+	private String email = "marcos@gmail.com";
 
 	@EJB
 	private UserServiceRemote userService;
+
+	@EJB
+	private TokenService tokenService;
+
+	@EJB
+	private GeneratorPasswordService generatorPasswordService;
+
+	@EJB(beanName = FacesMessagesHelper.FACES_MESSAGES_HELPER)
+	private FacesMessagesHelper messages;
 
 	/** Logger. */
 	private Logger log = Logger.getLogger(LoginMBean.class.getCanonicalName());
 
 	@PostConstruct
 	public void init() {
-		this.forwardUrl = extractRequestedUrlBeforeLogin();
+//		this.forwardUrl = extractRequestedUrlBeforeLogin();
 	}
 
 	private String extractRequestedUrlBeforeLogin() {
@@ -64,13 +73,33 @@ public class LoginMBean implements Serializable {
 		return FacesContext.getCurrentInstance();
 	}
 
-	public void onClickForgot() {
-		// redireciona para a pagina de Forgot.xhtml
-		// Recupero o usuario pelo e-mail digitado
-		// pego o email
-		// gero link de troca de senha : ver como é montado esse link
-		// envia email com o link
-		// criar pagina de troca de senha do link clicado
+	public String solicitarNovaSenha() {
+		UserSystem user = userService.findByEmail(email);
+		if (user == null) {
+			messages.warn("e-mail nao cadastrado", true);
+			return ConstantsView.PAGE_LOGIN;
+		}
+
+		// Gera Senha
+		String senhaToken = generatorPasswordService.gerarNovaSenha();
+
+		// Gerar Token
+		String token = tokenService.generate(user.getId().toString(), senhaToken);
+
+		// Monta URL
+		String url = externalContext().getRequestContextPath() + ConstantsView.PAGE_FORGOT + "&token=" + token;
+
+		System.out.println(url);
+
+		// Persistir o Token e sua senha
+		user.setToken(token);
+		user.setPasswordToken(senhaToken);
+		userService.save(user);
+
+		// TODO: mandar e-mail ( url ) JMS
+		messages.info("e-mail enviado com sucesso", true);
+
+		return ConstantsView.PAGE_LOGIN;
 	}
 
 	public String onClickLogar() throws IOException {
@@ -88,7 +117,7 @@ public class LoginMBean implements Serializable {
 
 			setUserSession(user);
 //			externalContext.redirect(forwardUrl);
-			return PAGINA_INDEX;
+			return ConstantsView.PAGE_MAIN;
 		} catch (ServletException e) {
 			// e.printStackTrace();
 			loginErrorMessage = e.getLocalizedMessage();
@@ -96,7 +125,7 @@ public class LoginMBean implements Serializable {
 			// tratar aqui mensagens de segurança que possam ter vindo
 			// do Login Module exibindo-as na forma de FacesMessage
 			if (loginErrorMessage != null) {
-				facesContext().addMessage(null, new FacesMessage(loginErrorMessage));
+				messages.error(loginErrorMessage, false);
 			}
 		}
 
@@ -104,7 +133,7 @@ public class LoginMBean implements Serializable {
 	}
 
 	private void setUserSession(UserSystem user) {
-		externalContext().getSessionMap().put(SESSION_USER_VARIABLE_NAME, user);
+		externalContext().getSessionMap().put(ConstantsView.SESSION_USER_VARIABLE_NAME, user);
 	}
 
 	public void logout() throws IOException {
@@ -143,5 +172,13 @@ public class LoginMBean implements Serializable {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

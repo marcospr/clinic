@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -28,16 +29,15 @@ public class UserService implements UserServiceRemote {
 			if (entity.getPassword() == null) {
 				entity.setPassword("123");// senha default para 1o cadastro
 			}
-			encript(entity);
+			entity.setPassword(encriptPassword(entity.getPassword()));
 			em.persist(entity);
 		} else {
 			em.merge(entity);
 		}
 	}
 
-	private void encript(UserSystem entity) {
-		String password = entity.getPassword();
-		entity.setPassword(CryptoUtil.createPasswordHash("MD5", CryptoUtil.BASE64_ENCODING, null, null, password));
+	private String encriptPassword(String password) {
+		return (CryptoUtil.createPasswordHash("MD5", CryptoUtil.BASE64_ENCODING, null, null, password));
 	}
 
 	@Override
@@ -63,8 +63,12 @@ public class UserService implements UserServiceRemote {
 	@Override
 	public UserSystem findByEmail(String email) {
 		UserSystem user = null;
-		user = em.createNamedQuery("UserSystem.findByEmail", UserSystem.class).setParameter("email", email)
-				.getSingleResult();
+		try {
+			user = em.createNamedQuery("UserSystem.findByEmail", UserSystem.class).setParameter("email", email)
+					.getSingleResult();
+		} catch (NoResultException e) {
+
+		}
 		return user;
 	}
 
@@ -79,14 +83,31 @@ public class UserService implements UserServiceRemote {
 	@Override
 	public List<UserSystem> findByLikeName(String likeName) {
 		List<UserSystem> users = null;
-		users = em.createNamedQuery("UserSystem.findByLikeName", UserSystem.class).setParameter("likeName", likeName)
-				.getResultList();
+		users = em.createNamedQuery("UserSystem.findByLikeName", UserSystem.class)
+				.setParameter("likeName", likeName + "%").getResultList();
 		return users;
 	}
 
 	@Override
-	public void changePassword(UserSystem entity) {
-		encript(entity);
+	public UserSystem findByToken(String token) {
+		UserSystem user = null;
+		try {
+			user = em.createNamedQuery("UserSystem.findByToken", UserSystem.class).setParameter("token", token)
+					.getSingleResult();
+		} catch (NoResultException | IllegalArgumentException e) {
+
+		}
+		return user;
+	}
+
+	@Override
+	public void changePassword(Long id, String novaSenha) {
+		UserSystem user = findById(id);
+		// Persistir nova senha e limpar token
+		user.setToken(null);
+		user.setPasswordToken(null);
+		user.setPassword(encriptPassword(novaSenha));
+		save(user);
 	}
 
 }
