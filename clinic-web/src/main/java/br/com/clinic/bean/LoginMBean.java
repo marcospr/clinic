@@ -2,14 +2,21 @@ package br.com.clinic.bean;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jms.Destination;
+import javax.jms.JMSContext;
+import javax.jms.JMSProducer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +49,14 @@ public class LoginMBean implements Serializable {
 
 	@EJB(beanName = FacesMessagesHelper.FACES_MESSAGES_HELPER)
 	private FacesMessagesHelper messages;
+
+	@Inject
+	private JMSContext jmsContext;
+
+	@Resource(name = "java:/jms/topics/CarrinhoComprasTopico")
+	private Destination destination;
+
+	private static ExecutorService executor = Executors.newFixedThreadPool(50);
 
 	/** Logger. */
 	private Logger log = Logger.getLogger(LoginMBean.class.getCanonicalName());
@@ -96,7 +111,19 @@ public class LoginMBean implements Serializable {
 		user.setPasswordToken(senhaToken);
 		userService.save(user);
 
-		// TODO: mandar e-mail ( url ) JMS
+		// mandar e-mail ( url ) JMS
+		JMSProducer producer = jmsContext.createProducer();
+
+		executor.submit(() -> {
+			try {
+
+				producer.send(destination, url);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
 		messages.info("e-mail enviado com sucesso", true);
 
 		return ConstantsView.PAGE_LOGIN;
