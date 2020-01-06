@@ -1,36 +1,28 @@
 package br.com.clinic.bean;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.jms.Destination;
-import javax.jms.JMSContext;
-import javax.jms.JMSProducer;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.clinic.helper.FacesMessagesHelper;
 import br.com.clinic.model.ConstantsView;
 import br.com.clinic.model.security.UserSystem;
+import br.com.clinic.service.SecurityServiceRemote;
 import br.com.clinic.service.UserServiceRemote;
-import br.com.clinic.service.impl.GeneratorPasswordService;
-import br.com.clinic.service.impl.TokenService;
 
 @Named
 @ViewScoped
-public class LoginMBean implements Serializable {
+public class LoginMBean extends GenericMBean<UserSystem> {
 
 	private static final long serialVersionUID = 535939470091051741L;
 
@@ -42,19 +34,10 @@ public class LoginMBean implements Serializable {
 	private UserServiceRemote userService;
 
 	@EJB
-	private TokenService tokenService;
-
-	@EJB
-	private GeneratorPasswordService generatorPasswordService;
+	private SecurityServiceRemote securityService;
 
 	@EJB(beanName = FacesMessagesHelper.FACES_MESSAGES_HELPER)
 	private FacesMessagesHelper messages;
-
-	@Inject
-	private JMSContext jmsContext;
-
-	@Resource(name = "java:/jms/topics/CarrinhoComprasTopico")
-	private Destination destination;
 
 	private static ExecutorService executor = Executors.newFixedThreadPool(50);
 
@@ -66,65 +49,53 @@ public class LoginMBean implements Serializable {
 //		this.forwardUrl = extractRequestedUrlBeforeLogin();
 	}
 
-	private String extractRequestedUrlBeforeLogin() {
-		ExternalContext externalContext = externalContext();
-		String requestedUrl = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_REQUEST_URI);
-		if (requestedUrl == null) {
-			return externalContext.getRequestContextPath() + "/Login.xhtml";
-		}
-		String queryString = (String) externalContext.getRequestMap().get(RequestDispatcher.FORWARD_QUERY_STRING);
-		return requestedUrl + (queryString == null ? "" : "?" + queryString);
-	}
-
-	private ExternalContext externalContext() {
-		return facesContext().getExternalContext();
-	}
-
-	public String getRequestContextPath() {
-		return externalContext().getRequestContextPath();
-	}
-
-	private FacesContext facesContext() {
-		return FacesContext.getCurrentInstance();
-	}
-
 	public String solicitarNovaSenha() {
+		// Validar e-mail do usuario
 		UserSystem user = userService.findByEmail(email);
 		if (user == null) {
-			messages.warn("e-mail nao cadastrado", true);
+			messages.warn(facesContext(), "e-mail nao cadastrado", true);
 			return ConstantsView.PAGE_LOGIN;
 		}
 
+		// Monta URL
+		String url = externalContext().getRequestContextPath() + ConstantsView.PAGE_FORGOT;
+
+		securityService.rememberPassword(user, url);
+
+//		executor.submit(() -> {
+		messages.info(facesContext(), "Nova senha foi enviado para seu e-mail", true);
+//		});
+
 		// Gera Senha
-		String senhaToken = generatorPasswordService.gerarNovaSenha();
+		// String senhaToken = generatorPasswordService.gerarNovaSenha();
 
 		// Gerar Token
-		String token = tokenService.generate(user.getId().toString(), senhaToken);
+//		String token = tokenService.generate(user.getId().toString(), senhaToken);
 
 		// Monta URL
-		String url = externalContext().getRequestContextPath() + ConstantsView.PAGE_FORGOT + "&token=" + token;
+//		String url = externalContext().getRequestContextPath() + ConstantsView.PAGE_FORGOT + "&token=" + token;
 
-		System.out.println(url);
+//		System.out.println(url);
 
 		// Persistir o Token e sua senha
-		user.setToken(token);
-		user.setPasswordToken(senhaToken);
-		userService.save(user);
+//		user.setToken(token);
+//		user.setPasswordToken(senhaToken);
+//		userService.save(user);
 
 		// mandar e-mail ( url ) JMS
-		JMSProducer producer = jmsContext.createProducer();
-
-		executor.submit(() -> {
-			try {
-
-				producer.send(destination, url);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-
-		messages.info("e-mail enviado com sucesso", true);
+//		JMSProducer producer = jmsContext.createProducer();
+//
+//		executor.submit(() -> {
+//			try {
+//				Map<String, Object> map = new HashMap<>();
+//				map.put("url", url);
+//				map.put("to", user.getEmail());
+//				producer.send(destinationMdb, map);
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
 
 		return ConstantsView.PAGE_LOGIN;
 	}
@@ -152,7 +123,7 @@ public class LoginMBean implements Serializable {
 			// tratar aqui mensagens de segurança que possam ter vindo
 			// do Login Module exibindo-as na forma de FacesMessage
 			if (loginErrorMessage != null) {
-				messages.error(loginErrorMessage, false);
+				messages.error(facesContext(), loginErrorMessage, false);
 			}
 		}
 
@@ -208,4 +179,5 @@ public class LoginMBean implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 }

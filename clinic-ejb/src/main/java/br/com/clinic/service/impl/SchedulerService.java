@@ -9,7 +9,7 @@ import br.com.clinic.model.Patient;
 import br.com.clinic.model.Schedule;
 import br.com.clinic.service.ReadOperation;
 
-public class ScheduleService implements ReadOperation<Schedule, Long>, Serializable {
+public class SchedulerService implements ReadOperation<Schedule, Long>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 

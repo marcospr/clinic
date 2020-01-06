@@ -29,7 +29,7 @@
 		<br/>
         <p:commandLink style="text-decoration:underline;color:blue;"
             value="Esqueci a senha"
-            onclick="PF('varDialogResetarSenha').show()"  />
+            onclick="PF('varDialogResetarSenha').show()" />
 	</h:form>
 	
 	
@@ -45,7 +45,7 @@
             <br/>
             <p:commandButton value="Enviar senha" 
                 actionListener="#{loginMBean.solicitarNovaSenha}"
-                oncomplete="if (!args.validationFailed) PF('userDialogWidgetVar').hide()" />
+                oncomplete="if (!args.validationFailed) PF('varDialogResetarSenha').hide()" />
             <p:commandButton value="Cancelar"  onclick="varDialogResetarSenha.hide()" />
         </p:dialog>
     </h:form>

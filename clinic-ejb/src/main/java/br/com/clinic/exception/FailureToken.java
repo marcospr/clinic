@@ -1,4 +1,4 @@
-package br.com.clinic.service.exception;
+package br.com.clinic.exception;
 
 public class FailureToken extends Exception {
 

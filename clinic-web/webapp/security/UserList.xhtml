@@ -24,7 +24,7 @@
 						size="30" value="#{userMBean.termoPesquisa}"/>
 					
 					<p:commandButton value="Pesquisar" icon="fa fa-search"
-						actionListener="#{userMBean.pesquisar}" update="usersDataTable messages"
+						actionListener="#{userMBean.onClickpesquisar}" update="usersDataTable messages"
 						process="@this termoPesquisa"/>
 					
 					<span class="ui-separator">
@@ -52,7 +52,7 @@
 		            
 		            <p:commandButton title="Excluir" icon="fa fa-trash" 
 		            	disabled="#{not userMBean.usuarioSeleciona}"
-		            	actionListener="#{userMBean.excluir}"
+		            	actionListener="#{userMBean.onClickexcluir}"
 		            	update="messages usersDataTable toolbar"
 		            	process="@this">
 		            	<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
@@ -137,7 +137,7 @@
 					
 					<h:outputLabel />
 					
-					<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{userMBean.salvar}"
+					<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{userMBean.onClicksalvar}"
 						update="userPanelGrid userMessages"
 						oncomplete="if (!args.validationFailed) PF('userDialogWidgetVar').hide()" process="userDialog"/>
 				</h:panelGrid>

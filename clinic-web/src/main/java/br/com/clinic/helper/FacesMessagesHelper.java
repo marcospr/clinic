@@ -9,12 +9,12 @@ import javax.faces.context.Flash;
 
 @Stateless(name = FacesMessagesHelper.FACES_MESSAGES_HELPER)
 public class FacesMessagesHelper implements Serializable {
+
 	public final static String FACES_MESSAGES_HELPER = "facesMessagesHelper";
 	private static final long serialVersionUID = 1L;
 
-	private void add(String message, FacesMessage.Severity severity, boolean isFlash) {
+	private void add(FacesContext facesContext, String message, FacesMessage.Severity severity, boolean isFlash) {
 		if (isFlash) {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
 			Flash flash = facesContext.getExternalContext().getFlash();
 			flash.setKeepMessages(true);
 			flash.setRedirect(true);
@@ -25,16 +25,16 @@ public class FacesMessagesHelper implements Serializable {
 		}
 	}
 
-	public void info(String msg, boolean isFlash) {
-		add(msg, FacesMessage.SEVERITY_INFO, isFlash);
+	public void info(FacesContext facesContext, String msg, boolean isFlash) {
+		add(facesContext, msg, FacesMessage.SEVERITY_INFO, isFlash);
 	}
 
-	public void error(String msg, boolean isFlash) {
-		add(msg, FacesMessage.SEVERITY_ERROR, isFlash);
+	public void error(FacesContext facesContext, String msg, boolean isFlash) {
+		add(facesContext, msg, FacesMessage.SEVERITY_ERROR, isFlash);
 	}
 
-	public void warn(String msg, boolean isFlash) {
-		add(msg, FacesMessage.SEVERITY_WARN, isFlash);
+	public void warn(FacesContext facesContext, String msg, boolean isFlash) {
+		add(facesContext, msg, FacesMessage.SEVERITY_WARN, isFlash);
 	}
 
 }

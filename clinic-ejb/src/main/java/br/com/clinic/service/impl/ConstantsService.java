@@ -1,4 +1,4 @@
-package br.com.clinic.service.model;
+package br.com.clinic.service.impl;
 
 public final class ConstantsService {
 

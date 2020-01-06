@@ -1,6 +1,5 @@
 package br.com.clinic.bean;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import br.com.clinic.service.UserServiceRemote;
 
 @Named
 @SessionScoped
-public class UserMBean implements Serializable {
+public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private UserServiceRemote userService;
@@ -44,37 +43,25 @@ public class UserMBean implements Serializable {
 	public void prepararEdicao() {
 	}
 
-	public void salvar() {
-		userService.save(user);
-
-		atualizarRegistros();
-
-		messages.info("Empresa salva com sucesso!", false);
-
-		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
+	public void onClicksalvar() {
+		save(user);
 	}
 
-	public void excluir() {
-		userService.delete(user);
-
-		user = null;
-
-		atualizarRegistros();
-
-		messages.info("Usuario excluído com sucesso!", false);
+	public void onClickexcluir() {
+		delete(user);
 	}
 
-	public void pesquisar() {
+	public void onClickpesquisar() {
 		users = userService.findByLikeName(termoPesquisa);
 
 		if (users.isEmpty()) {
-			messages.info("Sua consulta não retornou registros.", false);
+			messages.info(facesContext(), "Sua consulta não retornou registros.", false);
 		}
 	}
 
 	private void atualizarRegistros() {
 		if (jaHouvePesquisa()) {
-			pesquisar();
+			onClickpesquisar();
 		} else {
 			todosUsuarios();
 		}
@@ -85,7 +72,7 @@ public class UserMBean implements Serializable {
 	}
 
 	public void todosUsuarios() {
-		users = userService.findAll();
+		users = findAll();
 	}
 
 	public boolean isUsuarioSeleciona() {
@@ -114,6 +101,40 @@ public class UserMBean implements Serializable {
 
 	public void setTermoPesquisa(String termoPesquisa) {
 		this.termoPesquisa = termoPesquisa;
+	}
+
+	@Override
+	protected void save(UserSystem user) {
+		userService.save(user);
+
+		atualizarRegistros();
+
+		messages.info(facesContext(), "Empresa salva com sucesso!", false);
+
+		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
+
+	}
+
+	@Override
+	protected void delete(UserSystem user) {
+		userService.delete(user);
+
+		user = null;
+
+		atualizarRegistros();
+
+		messages.info(facesContext(), "Usuario excluído com sucesso!", false);
+
+	}
+
+	@Override
+	protected List<UserSystem> findAll() {
+		return userService.findAll();
+	}
+
+	@Override
+	protected UserSystem findById(Long id) {
+		return userService.findById(id);
 	}
 
 }

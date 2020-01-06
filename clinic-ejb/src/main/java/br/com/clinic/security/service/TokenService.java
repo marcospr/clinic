@@ -1,4 +1,4 @@
-package br.com.clinic.service.impl;
+package br.com.clinic.security.service;
 
 import java.security.Key;
 import java.util.Calendar;
@@ -8,8 +8,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.Singleton;
 import javax.xml.bind.DatatypeConverter;
 
-import br.com.clinic.service.exception.FailureToken;
-import br.com.clinic.service.model.ConstantsService;
+import br.com.clinic.exception.FailureToken;
+import br.com.clinic.service.impl.ConstantsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -19,8 +19,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 
 @Singleton
-public class TokenService {
+public class TokenService implements TokenServiceRemote {
 
+	@Override
 	public String generate(String userId, String secret) {
 
 		// The JWT signature algorithm we will be using to sign the token
@@ -48,6 +49,7 @@ public class TokenService {
 		return builder.compact();
 	}
 
+	@Override
 	public void parse(String token, String secret) throws FailureToken {
 		Claims claims = null;
 		try {
