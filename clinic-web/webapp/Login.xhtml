@@ -5,10 +5,9 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<f:view contentType="text/html"/>
-	<h:head>
-		<h:outputStylesheet library="css" name="estilo.css" />
-	</h:head>
+<h:head>
+	<h:outputStylesheet library="css" name="estilo.css" />
+</h:head>
 <h:body>
 	<p:messages id="messages" globalOnly="true" />
 	<h:form id="formLogin">
@@ -31,7 +30,6 @@
             value="Esqueci a senha"
             onclick="PF('varDialogResetarSenha').show()" />
 	</h:form>
-	
 	
 	<h:form id="dialog">
         <p:dialog id="dialogResetarSenha" header="Recuperar Senha"
