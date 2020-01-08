@@ -49,23 +49,19 @@
 			            <p:menuitem value="Expirados" ajax="false" action="/security/UserList?faces-redirect=true" rendered="#{request.isUserInRole('admin.security')}" />
 			        </p:submenu>
 		        </p:submenu>
-		        <p:submenu label="Administrador"   rendered="#{request.isUserInRole('admin.security')}" >
+		        <p:submenu label="Administração">
+		        	<p:submenu label="Segurança" rendered="#{request.isUserInRole('admin.security')}" >
 						<p:menuitem value="Usuarios"  title="(Ctrl+Shift+A)"  ajax="false" action="/security/UserList?faces-redirect=true"/> 							
 		            	<p:menuitem value="Roles" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true"/>
 		            	<p:menuitem value="Perfis" title="(Ctrl+Shift+E)" ajax="false" action="/security/UserList?faces-redirect=true"/>
+		            </p:submenu>
+		            <p:submenu label="Sistema" >
+		            	<p:menuitem value="Configuração"  ajax="false" action="/security/UserList?faces-redirect=true"/>
+		            	<p:menuitem value="Temas"  ajax="false" action="/security/Thema?faces-redirect=true"/> 
+		            </p:submenu>			
 		        </p:submenu>
 				<p:menuitem title="(Ctrl+Shift+D)" value="Sobre" action="/security/UserList?faces-redirect=true" ajax="false"/>
 		    </p:menubar>
-	  		<h:panelGrid columns="2" cellpadding="10">        
-				<h:outputText value="Temas:"></h:outputText>
-	    		<!-- Escolha de Temas -->
-				<h:form>
-					<p:themeSwitcher id="selectTema" style="width:165px" value="#{temaMBean.tema}" label="Tema:">
-					    <f:selectItems value="#{temaMBean.temas}" />
-					    <f:ajax/>
-					</p:themeSwitcher>
-				</h:form>
-			</h:panelGrid>
 		</h:form>
 		
 		

@@ -1,6 +1,5 @@
 package br.com.clinic.bean;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -8,9 +7,8 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
-
 import br.com.clinic.helper.FacesMessagesHelper;
+import br.com.clinic.model.ConstantsView;
 import br.com.clinic.model.security.UserSystem;
 import br.com.clinic.service.UserServiceRemote;
 
@@ -36,15 +34,18 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 		setUsers(userService.findAllByActive(Boolean.TRUE));
 	}
 
-	public void prepararNovoUsuario() {
+	public String prepararNovoUsuario() {
 		user = new UserSystem();
+		return ConstantsView.PAGE_USER_CREATE;
 	}
 
-	public void prepararEdicao() {
+	public String prepararEdicao() {
+		return ConstantsView.PAGE_USER_UPDATE;
 	}
 
-	public void onClicksalvar() {
+	public String onClicksalvar() {
 		save(user);
+		return ConstantsView.PAGE_USER_LIST;
 	}
 
 	public void onClickexcluir() {
@@ -111,7 +112,7 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 
 		messages.info(facesContext(), "Empresa salva com sucesso!", false);
 
-		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
+//		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
 
 	}
 

@@ -18,7 +18,12 @@ public abstract class GenericMBean<T extends EntityDefault> implements Serializa
 		return facesContext().getExternalContext();
 	}
 
-	protected String getRequestContextPath() {
+	/**
+	 * Esse metodo é acessado tanto pelas classes filhas como pela pagina xhtml
+	 * 
+	 * @return String
+	 */
+	public String getRequestContextPath() {
 		return externalContext().getRequestContextPath();
 	}
 

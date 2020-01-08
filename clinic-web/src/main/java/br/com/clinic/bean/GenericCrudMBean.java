@@ -20,7 +20,7 @@ public abstract class GenericCrudMBean<T extends EntityDefault, L> extends Gener
 	}
 
 	@Override
-	protected String getRequestContextPath() {
+	public String getRequestContextPath() {
 		return externalContext().getRequestContextPath();
 	}
 

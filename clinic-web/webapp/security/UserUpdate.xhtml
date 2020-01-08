@@ -9,7 +9,7 @@
 
 	<!-- Sessão Titulo -->
 	<ui:define name="titulo">
-		Inclusão de Usuários
+		Alteração de Usuários
 	</ui:define>
 
 	<!-- Sessão Corpo -->
@@ -21,6 +21,10 @@
 			<p:fieldset legend="Dados do usuario">
 				<h:panelGrid id="userPanelGrid" columns="2"
 					rendered="#{userMBean.user ne null}">
+					<p:outputLabel value="Id: " for="id" />
+					<p:inputText id="id" size="80" maxlength="100"
+						value="#{userMBean.user.id}" readonly="true"/>
+						
 					<p:outputLabel value="Nome: " for="name" />
 					<p:inputText id="name" size="80" maxlength="100"
 						value="#{userMBean.user.name}" />

@@ -9,7 +9,7 @@
 
 	<!-- Sessão Titulo -->
 	<ui:define name="titulo">
-		Cadastro de Usuários
+		Lista de Usuários
 	</ui:define>
 
 	<!-- Sessão Corpo -->	
@@ -32,10 +32,8 @@
 		            </span>
 		            
 		            <p:commandButton value="Nova" icon="fa fa-plus"
-		            	actionListener="#{userMBean.prepararNovoUsuario}" 
-		            	oncomplete="PF('userDialogWidgetVar').show()"
-		            	update="userDialog" process="@this">
-		            	<p:resetInput target="userDialog" />	
+		            	action="#{userMBean.prepararNovoUsuario}"
+		            	update="usersDataTable" process="@this">
 	            	</p:commandButton>
 		            
 					<span class="ui-separator">
@@ -44,10 +42,8 @@
 		            
 		            <p:commandButton title="Editar" icon="fa fa-edit" 
 		            	disabled="#{not userMBean.usuarioSeleciona}"
-		            	actionListener="#{userMBean.prepararEdicao}"
-		            	oncomplete="PF('userDialogWidgetVar').show()"
-		            	update="userDialog" process="@this">
-		            	<p:resetInput target="userDialog" />	
+		            	action="#{userMBean.prepararEdicao}"
+		            	update="usersDataTable" process="@this">	
 	            	</p:commandButton>
 		            
 		            <p:commandButton title="Excluir" icon="fa fa-trash" 
@@ -109,39 +105,6 @@
 			        <h:outputText value="#{user.actived}" />
 			    </p:column>
 			</p:dataTable>
-			
-			<p:dialog id="userDialog" header="Novo usuario" widgetVar="userDialogWidgetVar"
-				modal="true" resizable="false" closeOnEscape="true">
-				<p:messages id="userMessages" />
-				
-				<p:defaultCommand target="salvarCommandButton" scope="userDialog" />
-				
-				<h:panelGrid id="userPanelGrid" columns="2"	rendered="#{userMBean.user ne null}">
-					<p:outputLabel value="Nome: " for="name" />
-					<p:inputText id="name" size="80" maxlength="100" value="#{userMBean.user.name}" />
-					
-					<p:outputLabel value="Senha: " for="senhaHide" />
-					<p:inputText id="senhaHide" size="80" value="#{userMBean.user.password}" readonly="true"/>
-					
-					<p:outputLabel value="Email: " for="email" />
-					<p:inputText id="email" size="80" maxlength="100" 
-						value="#{userMBean.user.email}" />
-						
-					<p:outputLabel value="Telefone: " for="phone" />
-					<p:inputText id="phone" size="80" maxlength="100" 
-						value="#{userMBean.user.phone}" />
-					
-					<p:outputLabel value="Data expiração usuário: " for="userExpiresDate" />
-					<p:calendar id="userExpiresDate" pattern="dd/MM/yyyy" size="30" 
-						value="#{userMBean.user.userExpiresDate}"/>
-					
-					<h:outputLabel />
-					
-					<p:commandButton id="salvarCommandButton" value="Salvar" actionListener="#{userMBean.onClicksalvar}"
-						update="userPanelGrid userMessages"
-						oncomplete="if (!args.validationFailed) PF('userDialogWidgetVar').hide()" process="userDialog"/>
-				</h:panelGrid>
-			</p:dialog>
 	     </h:form>
      </ui:define>
 	
