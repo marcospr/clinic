@@ -14,6 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.clinic.model.EntityDefault;
 import lombok.NoArgsConstructor;
@@ -27,10 +30,13 @@ import lombok.NoArgsConstructor;
 		@NamedQuery(name = "UserSystem.findByToken", query = "select u from UserSystem u where u.token = :token"),
 		@NamedQuery(name = "UserSystem.findByEmail", query = "select u from UserSystem u where u.email = :email"),
 		@NamedQuery(name = "UserSystem.findByLikeName", query = "select u from UserSystem u where u.name like :likeName"),
-		@NamedQuery(name = "UserSystem.findAllByActived", query = "select u from UserSystem u where u.actived = :actived") })
+		@NamedQuery(name = "UserSystem.findAllByActived", query = "select u from UserSystem u where u.actived = :actived"),
+		@NamedQuery(name = "UserSystem.findAllByTokenIsNotNull", query = "select u from UserSystem u where u.token is not null") })
 @Entity
 @Table(name = "user_system")
 @NoArgsConstructor
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UserSystem extends EntityDefault {
 
 	private static final long serialVersionUID = 1838344567830360265L;

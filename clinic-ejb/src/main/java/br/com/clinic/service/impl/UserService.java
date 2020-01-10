@@ -101,12 +101,28 @@ public class UserService implements UserServiceRemote {
 	}
 
 	@Override
+	public List<UserSystem> findAllByTokenIsNotNull() {
+		List<UserSystem> users = null;
+		users = em.createNamedQuery("UserSystem.findAllByTokenIsNotNull", UserSystem.class).getResultList();
+		return users;
+	}
+
+	@Override
 	public void changePassword(Long id, String novaSenha) {
 		UserSystem user = findById(id);
 		// Persistir nova senha e limpar token
 		user.setToken(null);
 		user.setPasswordToken(null);
 		user.setPassword(encriptPassword(novaSenha));
+		save(user);
+	}
+
+	@Override
+	public void clearToken(UserSystem entity) {
+		UserSystem user = findById(entity.getId());
+		// Persistir nova senha e limpar token
+		user.setToken(null);
+		user.setPasswordToken(null);
 		save(user);
 	}
 

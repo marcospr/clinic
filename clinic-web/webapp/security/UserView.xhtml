@@ -9,7 +9,7 @@
 
 	<!-- Sessão Titulo -->
 	<ui:define name="titulo">
-		Inclusão de Usuários
+		Consulta de Usuários
 	</ui:define>
 
 	<!-- Sessão Corpo -->
@@ -21,34 +21,33 @@
 			<p:fieldset legend="Dados do usuario">
 				<h:panelGrid id="userPanelGrid" columns="2"
 					rendered="#{userMBean.user ne null}">
+					<p:outputLabel value="Id: " for="id" />
+					<p:inputText id="id" size="80" maxlength="100"
+						value="#{userMBean.user.id}" readonly="true" />
+
 					<p:outputLabel value="Nome: " for="name" />
 					<p:inputText id="name" size="80" maxlength="100"
-						value="#{userMBean.user.name}" />
+						value="#{userMBean.user.name}" readonly="true" />
 
 					<!-- <p:outputLabel value="Senha: " for="senhaHide" />
 					<p:inputText id="senhaHide" size="80" value="#{userMBean.user.password}" readonly="true"/> -->
 
 					<p:outputLabel value="Email: " for="email" />
 					<p:inputText id="email" size="80" maxlength="100"
-						value="#{userMBean.user.email}" />
+						value="#{userMBean.user.email}" readonly="true" />
 
 					<p:outputLabel value="Telefone: " for="phone" />
 					<p:inputText id="phone" size="80" maxlength="100"
-						value="#{userMBean.user.phone}" />
+						value="#{userMBean.user.phone}" readonly="true" />
 
 					<p:outputLabel value="Data expiração usuário: "
 						for="userExpiresDate" />
 					<p:calendar id="userExpiresDate" pattern="dd/MM/yyyy" size="30"
-						value="#{userMBean.user.userExpiresDate}" />
+						value="#{userMBean.user.userExpiresDate}" readonly="true" />
 
 					<h:outputLabel />
-
-					<h:panelGrid id="buttonPanelGrid" columns="2">
-						<p:commandButton id="salvarCommandButton" value="Salvar"
-							action="#{userMBean.onClicksalvar}" ajax="false" />
-						<p:commandButton id="retornarCommandButton" value="Cancelar"
-							action="/security/UserList?faces-redirect=true" ajax="false" />
-					</h:panelGrid>
+					<p:commandButton id="voltarCommandButton" value="Voltar"
+						action="/security/UserList?faces-redirect=true" ajax="false" />
 				</h:panelGrid>
 			</p:fieldset>
 		</h:form>

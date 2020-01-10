@@ -23,8 +23,8 @@
 					rendered="#{userMBean.user ne null}">
 					<p:outputLabel value="Id: " for="id" />
 					<p:inputText id="id" size="80" maxlength="100"
-						value="#{userMBean.user.id}" readonly="true"/>
-						
+						value="#{userMBean.user.id}" readonly="true" />
+
 					<p:outputLabel value="Nome: " for="name" />
 					<p:inputText id="name" size="80" maxlength="100"
 						value="#{userMBean.user.name}" />
@@ -47,8 +47,12 @@
 
 					<h:outputLabel />
 
-					<p:commandButton id="salvarCommandButton" value="Salvar"
-						action="#{userMBean.onClicksalvar}" ajax="false" />
+					<h:panelGrid id="buttonPanelGrid" columns="2">
+						<p:commandButton id="salvarCommandButton" value="Salvar"
+							action="#{userMBean.onClicksalvar}" ajax="false" />
+						<p:commandButton id="retornarCommandButton" value="Cancelar"
+							action="/security/UserList?faces-redirect=true" ajax="false" />
+					</h:panelGrid>
 				</h:panelGrid>
 			</p:fieldset>
 		</h:form>
