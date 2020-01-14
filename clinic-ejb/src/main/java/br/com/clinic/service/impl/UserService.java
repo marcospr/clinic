@@ -42,7 +42,9 @@ public class UserService implements UserServiceRemote {
 
 	@Override
 	public void delete(UserSystem entity) {
-		em.remove(entity);
+		UserSystem userMerged = em.merge(entity);
+		em.remove(userMerged);
+//		em.remove(em.getReference(UserSystem.class, entity.getId()));
 	}
 
 	@Override

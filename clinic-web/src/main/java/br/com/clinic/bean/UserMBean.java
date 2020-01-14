@@ -48,8 +48,9 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 		return ConstantsView.PAGE_USER_LIST;
 	}
 
-	public void onClickexcluir() {
+	public String onClickexcluir() {
 		delete(user);
+		return ConstantsView.PAGE_USER_LIST;
 	}
 
 	public void onClickpesquisar() {
@@ -110,7 +111,7 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 
 		atualizarRegistros();
 
-		messages.info(facesContext(), "Empresa salva com sucesso!", false);
+		messages.info(facesContext(), "Empresa salva com sucesso!", true);
 
 //		RequestContext.getCurrentInstance().update(Arrays.asList("formUser:usersDataTable", "formUser:messages"));
 
@@ -124,7 +125,7 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 
 		atualizarRegistros();
 
-		messages.info(facesContext(), "Usuario excluído com sucesso!", false);
+		messages.info(facesContext(), "Usuario excluído com sucesso!", true);
 
 	}
 

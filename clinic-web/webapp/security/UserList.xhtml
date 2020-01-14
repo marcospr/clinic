@@ -48,12 +48,9 @@
 		            
 		            <p:commandButton title="Excluir" icon="fa fa-trash" 
 		            	disabled="#{not userMBean.usuarioSeleciona}"
-		            	actionListener="#{userMBean.onClickexcluir}"
+		            	action="#{userMBean.onClickexcluir}"
 		            	update="messages usersDataTable toolbar"
-		            	process="@this">
-		            	<p:confirm icon="ui-icon-alert" header="Confirmação de exclusão" 
-		            		message="Posso excluir o usuário?" />	
-	            	</p:commandButton>
+		            	process="@this"/>
 		            
 					<span class="ui-separator">
 		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
