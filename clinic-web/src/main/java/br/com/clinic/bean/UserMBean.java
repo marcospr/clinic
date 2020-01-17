@@ -1,5 +1,6 @@
 package br.com.clinic.bean;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -31,7 +32,16 @@ public class UserMBean extends GenericCrudMBean<UserSystem, Long> {
 
 	@PostConstruct
 	public void init() {
-		setUsers(userService.findAllByActive(Boolean.TRUE));
+		try {
+			setUsers(userService.findAllByActive(Boolean.TRUE));
+		} catch (Exception e) {
+			messages.info(facesContext(), "Falha no servidor. " + e.getMessage(), true);
+			try {
+				externalContext().redirect(getRequestContextPath() + ConstantsView.PAGE_MAIN);
+			} catch (IOException e1) {
+				messages.info(facesContext(), "Falha no servidor. " + e.getMessage(), true);
+			}
+		}
 	}
 
 	public String prepararNovoUsuario() {

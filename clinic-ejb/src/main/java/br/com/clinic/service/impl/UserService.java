@@ -20,14 +20,14 @@ public class UserService implements UserServiceRemote {
 	/** Logger. */
 	private Logger log = Logger.getLogger(UserService.class.getCanonicalName());
 
-	@PersistenceContext(unitName = "ClinicPU")
+	@PersistenceContext(unitName = ConstantsService.PERSISTENCE_UNIT)
 	private EntityManager em;
 
 	@Override
 	public void save(UserSystem entity) {
 		if (entity.getId() == null) {
 			if (entity.getPassword() == null) {
-				entity.setPassword("123");// senha default para 1o cadastro
+				entity.setPassword(ConstantsService.SENHA_CADASTRO);// senha default para 1o cadastro
 			}
 			entity.setPassword(encriptPassword(entity.getPassword()));
 			em.persist(entity);

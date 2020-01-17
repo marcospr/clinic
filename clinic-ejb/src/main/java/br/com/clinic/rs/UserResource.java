@@ -19,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import br.com.clinic.model.security.Profile;
 import br.com.clinic.model.security.UserSystem;
 import br.com.clinic.service.ProfileServiceRemote;
 import br.com.clinic.service.UserServiceRemote;
@@ -37,7 +36,7 @@ public class UserResource {
 	@GET
 	@Path("{id}")
 	@Produces({ "application/json" })
-	public Response busca(@PathParam("id") long id) {
+	public Response findById(@PathParam("id") long id) {
 		UserSystem user = userService.findById(id);
 		if (user != null) {
 			return Response.ok(user).build();
@@ -48,26 +47,24 @@ public class UserResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response adiciona(UserSystem user) {
+	public Response add(UserSystem user) {
 		userService.save(user);
 		URI uri = URI.create("/" + user.getId());
 		return Response.created(uri).build();
 	}
 
 	@DELETE
-	@Path("{id}/profile/{profileId}")
-	public Response removeProfile(@PathParam("id") long id, @PathParam("profileId") long profile) {
-		Profile profileToDel = profileService.findById(id);
+	@Path("{id}")
+	public Response delete(@PathParam("id") long id) {
 		UserSystem user = userService.findById(id);
-		user.getProfile().remove(profileToDel);
-		userService.save(user);
+		userService.delete(user);
 		return Response.ok().build();
 	}
 
 	@PUT
 	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response altera(UserSystem user) {
+	public Response update(UserSystem user) {
 		userService.save(user);
 		return Response.ok().build();
 	}
@@ -75,8 +72,7 @@ public class UserResource {
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response listar() {
-
+	public Response findAll() {
 		List<UserSystem> users = userService.findAll();
 
 		GenericEntity<List<UserSystem>> entity = new GenericEntity<List<UserSystem>>(users) {
